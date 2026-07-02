@@ -28,9 +28,7 @@ def converter_para_figurinha(video_path, saida_path):
         clip = clip.subclip(0, 6)
 
     # redimensiona mantendo proporção e centralizando em 512x512
-    clip_resized = (
-        clip.resize(height=512) if clip.h < clip.w else clip.resize(width=512)
-    )
+    clip_resized = clip.resized(height=512) if clip.h < clip.w else clip.resized(width=512)
 
     # exporta como frames e monta o webp animado
     frames = []
