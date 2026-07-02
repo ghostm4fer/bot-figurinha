@@ -1,0 +1,6 @@
+flask
+twilio
+moviepy
+Pillow
+requests
+gunicorn
