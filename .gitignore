@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.env
+temp_video.mp4
+temp_sticker.webp
+venv/
