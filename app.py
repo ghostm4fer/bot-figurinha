@@ -5,6 +5,14 @@ from PIL import Image
 import requests
 import os
 import uuid
+import cloudinary
+import cloudinary.uploader
+
+cloudinary.config(
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET")
+)
 
 app = Flask(__name__)
 
@@ -68,13 +76,18 @@ def webhook():
             baixar_video(media_url, video_path)
             converter_para_figurinha(video_path, sticker_path)
 
-            # aqui о ideal seria fazer upload do sticker_path pra uma URL pública
-            # (ex: Cloudinary grátis) e mandar de volta via Twilio
-            resp.message(
-                "Figurinha convertida! ✅ (envio automático configurado no próximo passo)"
+            # sobe a figurinha pro Cloudinary e pega a URL pública
+            upload_resultado = cloudinary.uploader.upload(
+                sticker_path,
+                resource_type="image",
+                format="webp"
             )
+            url_figurinha = upload_resultado["secure_url"]
+
+            resp.message("Aqui está sua figurinha! 🎉").media(url_figurinha)
 
             os.remove(video_path)
+            os.remove(sticker_path)
 
         except Exception as e:
             resp.message(f"Deu erro ao converter: {str(e)}")
