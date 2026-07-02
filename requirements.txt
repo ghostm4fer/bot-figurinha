@@ -4,3 +4,4 @@ moviepy
 Pillow
 requests
 gunicorn
+cloudinary
